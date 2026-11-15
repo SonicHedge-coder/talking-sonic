@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Appeler Sonic</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0b2a6b}
+.app{width:100%;max-width:480px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;position:relative;background:linear-gradient(180deg,#3aa7ff 0%,#7cc6ff 30%,#b8e6ff 46%,#7ed957 46.5%,#4caf3d 100%);overflow:hidden}
+.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.9;pointer-events:none}
+.cloud1{width:90px;height:26px;top:60px;left:18px}.cloud2{width:70px;height:22px;top:100px;right:20px}
+.home{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px 10px;position:relative;z-index:2}
+.home h1{margin:0;color:#fff;font-size:34px;text-shadow:0 3px 0 rgba(0,0,0,.2)}
+.home p{margin:6px 0 0;color:rgba(255,255,255,.95);font-weight:600;text-align:center}
+.sonic-home{width:260px;height:310px;margin:10px 0 0;transform-origin:50% 100%;animation:idle 2.2s ease-in-out infinite;cursor:pointer}
+@keyframes idle{0%,100%{transform:translateY(0) rotate(-1.2deg)}50%{transform:translateY(-9px) rotate(1.2deg)}}
+.sonic-home img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 10px rgba(0,0,0,.25))}
+.shadow{width:200px;height:20px;background:rgba(0,0,0,.28);border-radius:50%;filter:blur(4px);margin-top:-6px}
+.call-btn{margin-top:18px;border:0;cursor:pointer;background:linear-gradient(180deg,#3ddc54,#12a32a);color:#fff;font-size:20px;font-weight:900;padding:18px 34px;border-radius:999px;box-shadow:0 7px 0 #0a6b1a,0 14px 24px rgba(0,0,0,.3);display:flex;align-items:center;gap:10px}
+.call-btn:active{transform:translateY(4px);box-shadow:0 3px 0 #0a6b1a}
+.hint{margin-top:10px;font-size:12px;color:rgba(255,255,255,.9);font-weight:600;text-align:center}
+.settings{width:100%;background:rgba(255,255,255,.95);border-radius:18px;padding:12px;margin-top:16px}
+.settings label{font-size:12px;font-weight:800;color:#333;display:flex;justify-content:space-between}
+.settings input[type=range]{width:100%;accent-color:#0b6bff}
+.warn{background:#fff3cd;border:1px solid #ffcc00;border-radius:12px;padding:10px;font-size:12px;color:#664d00;margin-top:8px;line-height:1.4}
+.warn b{color:#b77900}
+.btn-small{border:0;cursor:pointer;border-radius:12px;padding:10px 12px;font-weight:800;font-size:13px;width:100%;margin-top:8px}
+.btn-test{background:#e8f2ff;color:#0b3fa8}
+.btn-record-sonic{background:#ffe8ec;color:#a1002e}
+.upload label{display:block;background:#fff;border:2px dashed #cbd5e1;border-radius:12px;padding:9px;text-align:center;font-size:12px;font-weight:700;color:#555;cursor:pointer;margin-top:8px}
+.upload input{display:none}
+.audio-count{font-size:11px;color:#777;text-align:center;margin-top:6px}
+.call-screen{display:none;flex:1;flex-direction:column;position:relative;z-index:3;background:linear-gradient(180deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);color:#fff}
+.call-screen.show{display:flex}
+.call-top{padding:calc(14px + env(safe-area-inset-top)) 16px 0;text-align:center}
+.call-top .name{font-size:24px;font-weight:900}
+.call-top .timer{font-size:15px;opacity:.85;margin-top:4px}
+.call-top .state{margin:10px auto 0;display:inline-block;background:rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:700}
+.call-top .state.listening{color:#7CFF9A}.call-top .state.responding{color:#FFD93B}
+.call-scene{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:10px}
+.call-sonic{width:250px;height:300px;transform-origin:50% 100%;animation:idle 2.2s ease-in-out infinite}
+.call-sonic.talking{animation:talkBounce .3s ease-in-out infinite}
+@keyframes talkBounce{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-12px) scale(1.04,.96)}}
+.call-sonic.ringing{animation:ringShake .35s ease-in-out infinite}
+@keyframes ringShake{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.call-sonic img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 14px rgba(0,0,0,.4))}
+.waves{display:flex;gap:5px;align-items:center;height:28px;margin-top:8px;min-height:28px}
+.waves i{display:block;width:5px;background:#fff;border-radius:99px;height:6px}
+.waves.speaking i{background:#7CFF9A}.waves.sonic i{background:#FFD93B}
+.caption{font-size:13px;opacity:.75;margin-top:6px;min-height:18px;text-align:center;padding:0 20px}
+.call-controls{padding:0 16px calc(18px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:18px}
+.round{width:72px;height:72px;border-radius:50%;border:0;cursor:pointer;font-size:28px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.round small{font-size:10px;font-weight:800;margin-top:1px}
+.hangup{background:#e11d2e;color:#fff;box-shadow:0 6px 0 #8f0000;width:84px;height:84px;font-size:32px}
+.mic-toggle{background:rgba(255,255,255,.18);color:#fff}.mic-toggle.muted{background:#555;color:#bbb}.mic-toggle:disabled{opacity:.35}
+.speaker{background:rgba(255,255,255,.18);color:#fff}.speaker.off{background:#555}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cloud cloud1"></div><div class="cloud cloud2"></div>
+  <div class="home" id="home">
+    <h1>SONIC</h1>
+    <p>Appelle-le et parle-lui comme au téléphone</p>
+    <div class="sonic-home" id="sonicHome"><img id="sonicImgHome" src="sprites/sonic_normal.png" alt="Sonic"></div>
+    <div class="shadow"></div>
+    <button class="call-btn" id="startCallBtn"><span>📞</span> Appeler Sonic</button>
+    <div class="hint">Il décroche, tu parles, quand tu t'arrêtes il répond.</div>
+    <div class="settings">
+      <label style="margin-top:10px"><span>PITCH de ta voix</span><span id="pitchVal">1.60x</span></label>
+      <input type="range" id="pitchSlider" min="0.5" max="2.2" step="0.05" value="1.6">
+      <label style="margin-top:6px"><span>Réponse de Sonic</span></label>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <label style="flex:1;background:#fff3c4;padding:8px;border-radius:10px;justify-content:center"><input type="radio" name="replyMode" value="pitched" checked style="margin-right:6px"> Ma voix pitchée ✅ marche toujours</label>
+        <label style="flex:1;background:#e8f2ff;padding:8px;border-radius:10px;justify-content:center"><input type="radio" name="replyMode" value="audio" style="margin-right:6px"> Ses audios</label>
+      </div>
+      <button class="btn-small btn-test" id="testSonicBtn">🔊 Tester si Sonic parle</button>
+      <button class="btn-small btn-record-sonic" id="recordSonicBtn">🎙️ Enregistrer une réplique pour Sonic (3s)</button>
+      <div class="upload"><label for="audioUpload">＋ Ajouter mes audios Sonic (.mp3)</label><input type="file" id="audioUpload" accept="audio/*" multiple></div>
+      <div class="audio-count" id="audioList">Mets tes .mp3 dans <b>audios/</b> ou ajoute-les ici.</div>
+    </div>
+  </div>
+  <div class="call-screen" id="callScreen">
+    <div class="call-top"><div class="name">Sonic</div><div class="timer" id="callTimer">En appel • 00:00</div><div><div class="state ringing" id="callState">Ça sonne...</div></div></div>
+    <div class="call-scene"><div class="call-sonic" id="callSonic"><img id="sonicImgCall" src="sprites/sonic_surprised.png" alt="Sonic"></div><div class="waves" id="waves"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="caption" id="caption">Sonic décroche...</div></div>
+    <div class="call-controls"><button class="round mic-toggle" id="muteBtn">🎤<small>Muet</small></button><button class="round hangup" id="hangupBtn">📞<small>Raccrocher</small></button><button class="round speaker" id="speakerBtn">🔊<small>Haut-parleur</small></button></div>
+  </div>
+</div>
+<audio id="sonicPlayer" preload="auto"></audio>
+<script>
+const SPRITES={normal:"sprites/sonic_normal.png",happy:"sprites/sonic_happy.png",laugh:"sprites/sonic_laugh.png",surprised:"sprites/sonic_surprised.png",angry:"sprites/sonic_angry.png"};
+Object.values(SPRITES).forEach(s=>{const i=new Image();i.src=s;});
+const SONIC_AUDIOS = [
+  "audios/1.mp3",
+  "audios/2.mp3",
+  "audios/3.mp3",
+  "audios/4.mp3",
+  "audios/5.wav", // j'ai juste rajouté le audios/ qui manquait
+  "audios/6.wav",
+  "audios/7.wav",
+  "audios/8.wav"
+]; // QUE tes audios uploadés, plus de faux fichiers;
+const ALL_MOODS=Object.keys(SPRITES);
+const $=s=>document.querySelector(s);
+const home=$("#home"),callScreen=$("#callScreen"),sonicImgHome=$("#sonicImgHome"),sonicImgCall=$("#sonicImgCall"),callSonic=$("#callSonic"),
+startCallBtn=$("#startCallBtn"),hangupBtn=$("#hangupBtn"),muteBtn=$("#muteBtn"),speakerBtn=$("#speakerBtn"),
+callTimer=$("#callTimer"),callState=$("#callState"),caption=$("#caption"),waves=$("#waves"),
+sonicPlayer=$("#sonicPlayer"),pitchSlider=$("#pitchSlider"),pitchVal=$("#pitchVal"),
+audioUpload=$("#audioUpload"),audioList=$("#audioList"),sonicWarn=$("#sonicWarn"),testSonicBtn=$("#testSonicBtn"),recordSonicBtn=$("#recordSonicBtn");
+let userAudios=[], sonicCustomAudios=[];
+let lastAudioIndex = -1; // répliques enregistrées pour Sonic
+let stream=null,audioCtx=null,analyser=null,micSource=null,mediaRecorder=null,chunks=[];
+let isInCall=false,isMuted=false,isResponding=false,hasSpoken=false;
+let callStartTime=0,timerInterval=null,rafId=null,silenceSince=0;
+let lastVoiceURL=null,lastVoiceBlob=null,speakerOn=true, sonicRecorder=null, sonicChunks=[];
+const waveBars=[...waves.querySelectorAll("i")];
+function setWaves(level,mode){waves.className="waves "+(mode||"");waveBars.forEach((b,i)=>{const h=mode==="idle"?6:6+Math.random()*level*34+Math.sin(Date.now()/120+i)*4;b.style.height=Math.max(5,Math.min(38,h))+"px";});}
+function setSprite(mood){if(SPRITES[mood]){sonicImgHome.src=SPRITES[mood];sonicImgCall.src=SPRITES[mood];}}
+function setRandomSprite(){setSprite(ALL_MOODS[Math.floor(Math.random()*ALL_MOODS.length)]);}
+function allSonicAudios(){return [...SONIC_AUDIOS,...userAudios,...sonicCustomAudios];}
+function updateAudioCount(){
+  const totalCustom=sonicCustomAudios.length, totalUpload=userAudios.length;
+  const total=totalCustom+totalUpload;
+  // On ne compte PAS les fichiers audios/ car on ne peut pas vérifier s'ils existent vraiment sans les tester
+  audioList.textContent=`${total} réplique(s) ajoutée(s) par toi. ${totalCustom?`Dont ${totalCustom} enregistrée(s) pour Sonic.`:""}`;
+  if(total>0) sonicWarn.style.display="none"; else sonicWarn.style.display="block";
+}
+function playAudioFile(src,onDone){
+  sonicPlayer.pause(); sonicPlayer.src=src; sonicPlayer.playbackRate=1; sonicPlayer.preservesPitch=true;
+  sonicPlayer.onended=()=>onDone(); sonicPlayer.onerror=()=>onDone(false);
+  sonicPlayer.play().then(()=>{}).catch(()=>onDone(false));
+}
+// ===== TEST : est-ce que Sonic parle vraiment ? =====
+testSonicBtn.addEventListener("click", async ()=>{
+  testSonicBtn.textContent="🔊 Test en cours...";
+  // On teste d'abord un fichier audios/
+  const list=allSonicAudios();
+  if(list.length){
+    playAudioFile(list[list.length-1], (ok)=>{
+      if(ok===false){ testSonicBtn.textContent="❌ Cet audio ne marche pas, essaie un autre"; }
+      else testSonicBtn.textContent="✅ Sonic a parlé !";
+      setTimeout(()=> testSonicBtn.textContent="🔊 Tester si Sonic parle", 2000);
+    });
+  } else {
+    // Pas d'audio : on fait un bip avec Web Audio pour prouver que le son marche
+    try{
+      if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      await audioCtx.resume();
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+      o.type="sine"; o.frequency.value=880; g.gain.value=0.2;
+      o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.4);
+      testSonicBtn.textContent="✅ Le son marche ! Mais tu n'as pas d'audios Sonic, il utilisera ta voix pitchée.";
+    }catch{ testSonicBtn.textContent="❌ Le son est bloqué, autorise le son / clique à nouveau."; }
+    setTimeout(()=> testSonicBtn.textContent="🔊 Tester si Sonic parle", 3000);
+  }
+});
+// ===== ENREGISTRER UNE RÉPLIQUE POUR SONIC =====
+recordSonicBtn.addEventListener("click", async ()=>{
+  try{
+    const s=await navigator.mediaDevices.getUserMedia({audio:true});
+    sonicChunks=[]; sonicRecorder=new MediaRecorder(s);
+    sonicRecorder.ondataavailable=e=>{ if(e.data.size) sonicChunks.push(e.data); };
+    sonicRecorder.onstop=()=>{
+      const blob=new Blob(sonicChunks,{type:"audio/webm"});
+      const url=URL.createObjectURL(blob);
+      sonicCustomAudios.push(url);
+      updateAudioCount();
+      recordSonicBtn.textContent="✅ Réplique enregistrée ! Sonic pourra la dire.";
+      s.getTracks().forEach(t=>t.stop());
+      setTimeout(()=> recordSonicBtn.textContent="🎙️ Enregistrer une réplique pour Sonic (3s)", 2500);
+    };
+    sonicRecorder.start();
+    recordSonicBtn.textContent="🔴 Enregistrement Sonic... parle comme Sonic ! (3s)";
+    setTimeout(()=>{ if(sonicRecorder && sonicRecorder.state!=="inactive") sonicRecorder.stop(); }, 3000);
+  }catch{ alert("Autorise le micro."); }
+});
+audioUpload.addEventListener("change", ()=>{ [...audioUpload.files].forEach(f=> userAudios.push(URL.createObjectURL(f))); updateAudioCount(); });
+
+async function startCall(){
+  try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }catch{ alert("Autorise le micro pour appeler Sonic."); return; }
+  isInCall=true; isMuted=false; isResponding=false; hasSpoken=false;
+  home.style.display="none"; callScreen.classList.add("show");
+  callSonic.classList.add("ringing"); setSprite("surprised");
+  callState.textContent="Ça sonne..."; callState.className="state ringing"; caption.textContent="Sonic décroche...";
+  muteBtn.classList.remove("muted"); muteBtn.disabled=false;
+  setTimeout(()=>{ if(!isInCall) return; callSonic.classList.remove("ringing"); setSprite("happy"); callState.textContent="En appel"; callState.className="state listening"; caption.textContent="Parle, Sonic t'écoute..."; startTimer(); startListening(); },1400);
+}
+function startTimer(){ callStartTime=Date.now(); if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(()=>{ const s=Math.floor((Date.now()-callStartTime)/1000); const mm=String(Math.floor(s/60)).padStart(2,"0"), ss=String(s%60).padStart(2,"0"); callTimer.textContent=`En appel • ${mm}:${ss}`; },500); }
+function hangup(){ isInCall=false; isResponding=false; if(timerInterval) clearInterval(timerInterval); if(rafId) cancelAnimationFrame(rafId); if(mediaRecorder && mediaRecorder.state!=="inactive"){ try{mediaRecorder.stop();}catch{} } if(audioCtx){ try{audioCtx.close();}catch{} audioCtx=null; } if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; } sonicPlayer.pause(); callScreen.classList.remove("show"); home.style.display="flex"; setSprite("normal"); callTimer.textContent="En appel • 00:00"; }
+startCallBtn.addEventListener("click", startCall); hangupBtn.addEventListener("click", hangup);
+sonicImgHome.parentElement.addEventListener("click", startCall);
+muteBtn.addEventListener("click", ()=>{ if(!isInCall||isResponding) return; isMuted=!isMuted; if(stream) stream.getAudioTracks().forEach(t=> t.enabled=!isMuted); muteBtn.classList.toggle("muted",isMuted); caption.textContent=isMuted?"Tu es en muet.":"Parle, Sonic t'écoute..."; });
+speakerBtn.addEventListener("click", ()=>{ speakerOn=!speakerOn; speakerBtn.classList.toggle("off",!speakerOn); sonicPlayer.volume=speakerOn?1:0; });
+
+function startListening(){
+  chunks=[];
+  try{ mediaRecorder=new MediaRecorder(stream); mediaRecorder.ondataavailable=e=>{ if(e.data.size) chunks.push(e.data); }; mediaRecorder.onstop=()=>{ lastVoiceBlob=new Blob(chunks,{type:"audio/webm"}); if(lastVoiceURL) URL.revokeObjectURL(lastVoiceURL); lastVoiceURL=URL.createObjectURL(lastVoiceBlob); }; mediaRecorder.start(); }catch{}
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended") audioCtx.resume();
+  analyser=audioCtx.createAnalyser(); analyser.fftSize=512; micSource=audioCtx.createMediaStreamSource(stream); micSource.connect(analyser);
+  const data=new Uint8Array(analyser.fftSize); silenceSince=0; hasSpoken=false;
+  const loop=()=>{
+    if(!isInCall) return;
+    analyser.getByteTimeDomainData(data);
+    let sum=0; for(let i=0;i<data.length;i++){ const v=(data[i]-128)/128; sum+=v*v; }
+    const level=Math.sqrt(sum/data.length);
+    if(isResponding){ setWaves(0.6,"sonic"); rafId=requestAnimationFrame(loop); return; }
+    if(isMuted){ setWaves(0,"idle"); rafId=requestAnimationFrame(loop); return; }
+    setWaves(level*3,"speaking");
+    if(level>0.022){ hasSpoken=true; silenceSince=0; callState.textContent="Tu parles..."; }
+    else { if(hasSpoken){ silenceSince+=16; if(silenceSince>1200){ onUserFinishedSpeaking(); return; } } }
+    rafId=requestAnimationFrame(loop);
+  }; rafId=requestAnimationFrame(loop);
+}
+async function onUserFinishedSpeaking(){
+  if(!isInCall||isResponding) return; isResponding=true; muteBtn.disabled=true;
+  if(mediaRecorder && mediaRecorder.state!=="inactive"){ try{mediaRecorder.stop();}catch{} }
+  // ATTENDRE que l'enregistrement soit vraiment prêt (c'était le bug : on jouait avant)
+  await new Promise(r=>setTimeout(r,250));
+  callState.textContent="Sonic répond..."; callState.className="state responding"; caption.textContent="Sonic répond...";
+  setRandomSprite(); callSonic.classList.add("talking");
+  const mode=document.querySelector('input[name="replyMode"]:checked')?.value || "pitched";
+  if(mode==="pitched"){
+    // GARANTI : il répète TA voix pitchée, même sans aucun fichier audio
+    if(lastVoiceURL) playPitchedVoice(()=> finishSonicResponse());
+    else setTimeout(()=> finishSonicResponse(), 800);
+  } else {
+    // Mode audios : on essaie les audios, et si AUCUN ne marche, on bascule sur voix pitchée
+    const list=allSonicAudios();
+    if(list.length){
+      let idx; do { idx = Math.floor(Math.random() * list.length); } while (list.length > 1 && idx === lastAudioIndex); lastAudioIndex = idx; tryPlaySonicAudios(list, idx);
+    } else {
+      if(lastVoiceURL) playPitchedVoice(()=> finishSonicResponse());
+      else setTimeout(()=> finishSonicResponse(), 800);
+    }
+  }
+}
+function tryPlaySonicAudios(list, idx){
+  if(idx>=list.length){
+    // Aucun audio n'a marché -> fallback voix pitchée pour ne jamais rester muet
+    if(lastVoiceURL) playPitchedVoice(()=> finishSonicResponse());
+    else finishSonicResponse();
+    return;
+  }
+  sonicPlayer.volume=1; sonicPlayer.muted=false; sonicPlayer.src=list[idx]; sonicPlayer.playbackRate=1; sonicPlayer.preservesPitch=true;
+  sonicPlayer.onended=()=> finishSonicResponse();
+  sonicPlayer.onerror=()=> tryPlaySonicAudios(list, idx+1);
+  sonicPlayer.play().catch(()=> tryPlaySonicAudios(list, idx+1));
+  // BUG CORRIGÉ : plus de coupure après 7s, Sonic finit sa phrase
+}
+function playPitchedVoice(done){
+  if(!lastVoiceURL){ done(); return; }
+  const pitch=parseFloat(pitchSlider.value);
+  sonicPlayer.pause(); sonicPlayer.src=lastVoiceURL; sonicPlayer.playbackRate=pitch;
+  sonicPlayer.preservesPitch=false; sonicPlayer.mozPreservesPitch=false; sonicPlayer.webkitPreservesPitch=false;
+  sonicPlayer.onended=()=> done(); sonicPlayer.onerror=()=> done();
+  sonicPlayer.play().catch(()=> done());
+}
+function finishSonicResponse(){ if(!isInCall) return; callSonic.classList.remove("talking"); isResponding=false; muteBtn.disabled=false; setSprite("normal"); callState.textContent="En appel"; callState.className="state listening"; caption.textContent="À toi, parle..."; startListening(); }
+pitchSlider.addEventListener("input", ()=> pitchVal.textContent=parseFloat(pitchSlider.value).toFixed(2)+"x");
+updateAudioCount(); setSprite("normal");
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+</html>
